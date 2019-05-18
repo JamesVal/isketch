@@ -1,0 +1,42 @@
+#drawingCanvas:hover {
+  cursor: crosshair;
+  /*
+  height: 700px;
+  width: 700px;
+  */
+}
+
+.button-container {
+  padding-top: 15px;
+  padding-right: 15px;
+  display: inline-block;
+  width: 125px;
+}
+
+.button {
+  background-color: green;
+  width: 90%;
+  padding: 10px;
+  color: white;
+  font-family: arial;
+  display: inline-block;
+  text-align:center;
+}
+
+.button.isSelected {
+  background-color: darkgreen;
+}
+
+.button-clear {
+  background-color: red;
+  width: 90%;
+  padding: 10px;
+  color: white;
+  font-family: arial;
+  display: inline-block;
+  text-align:center;
+}
+
+.button:hover, .button-clear:hover {
+  cursor: pointer;
+}
