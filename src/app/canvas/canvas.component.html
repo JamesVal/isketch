@@ -4,5 +4,7 @@
 <div id="helper-controls-container">
   <div class="button-container"><div class="button" [class.isSelected]="brushType == 0" (click)="setBrush(0)">Pencil</div></div>
   <div class="button-container"><div class="button" [class.isSelected]="brushType == 1" (click)="setBrush(1)">Fill</div></div>
+  <div class="button-container"><div class="button" [class.isSelected]="brushType == 2" (click)="setBrush(2)">Eraser</div></div>
   <div class="button-container"><div class="button-clear" (click)="clearCanvas()">Clear Canvas</div></div>
+  <input [(colorPicker)]="color" [style.background]="color"/>
 </div>

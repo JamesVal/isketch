@@ -1,33 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
-class DrawCoordinate {
-  m_x: number;
-  m_y: number;
-
-  setCoordinate(x: number, y: number): void {
-    this.m_x = x;
-    this.m_y = y;
-  }
-
-  getX(): number {
-    return this.m_x;
-  }
-
-  getY(): number {
-    return this.m_y;
-  }
-}
-
-interface RGB {
-  red: number;  
-  green: number;  
-  blue: number;  
-}
-
-class Brush {
-  type: number;
-  color: RGB;
-}
+import { DrawingBrushManager } from './brush';
+import { DrawCoordinate, RGB } from './misc';
 
 @Component({
   selector: 'app-canvas',
@@ -42,15 +16,29 @@ export class CanvasComponent implements OnInit {
   brushType: number = 0;
   brushColor: RGB;
   pixelArray: any;
-  lastCoordinate: DrawCoordinate = new DrawCoordinate();
+  color: string;
+  drawingBrush: DrawingBrushManager = new DrawingBrushManager();
+
   currentCoordinate: DrawCoordinate = new DrawCoordinate();
 
   getColorIndicesForCoord(x: number, y: number) {
     const red = y * (700 * 4) + x * 4;
-    return [red, red + 1, red + 2, red + 3];
+    return [red, red + 1, red + 2];
   }
 
-  async colorPixelSet(startPixel: DrawCoordinate, newColor: RGB, originalColor: RGB) {
+  pixelInRange(pixelColor: RGB, originalColor: RGB) {
+    if (
+      ((pixelColor.red >= (originalColor.red - 16)) && (pixelColor.red <= (originalColor.red + 16))) && 
+      ((pixelColor.green >= (originalColor.green - 16)) && (pixelColor.green <= (originalColor.green + 16))) &&
+      ((pixelColor.blue >= (originalColor.blue - 16)) && (pixelColor.blue <= (originalColor.blue + 16)))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  colorPixelSet(startPixel: DrawCoordinate, newColor: RGB, originalColor: RGB) {
     var nextPixels = [];
     var currentPixels = [startPixel];
     var nextMapping = [
@@ -64,7 +52,7 @@ export class CanvasComponent implements OnInit {
       nextPixels = [];
 
       for (let currIdx = 0; currIdx < currentPixels.length; currIdx++) {
-        var [redIndex, greenIndex, blueIndex, alphaIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left, currentPixels[currIdx].getY() - this.offsetRect.top);
+        var [redIndex, greenIndex, blueIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left, currentPixels[currIdx].getY() - this.offsetRect.top);
         
         if ((this.pixelArray.data[redIndex] == newColor.red) && (this.pixelArray.data[greenIndex] == newColor.green) && (this.pixelArray.data[blueIndex] == newColor.blue)) continue;
 
@@ -73,12 +61,19 @@ export class CanvasComponent implements OnInit {
         this.pixelArray.data[blueIndex] = newColor.blue;
 
         for (let nextIdx = 0; nextIdx < nextMapping.length; nextIdx++) {       
-          var [redIndex, greenIndex, blueIndex, alphaIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left + nextMapping[nextIdx][0], currentPixels[currIdx].getY() - this.offsetRect.top + nextMapping[nextIdx][1]);
+          var [redIndex, greenIndex, blueIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left + nextMapping[nextIdx][0], currentPixels[currIdx].getY() - this.offsetRect.top + nextMapping[nextIdx][1]);
 
-          if ((this.pixelArray.data[redIndex] == originalColor.red) && (this.pixelArray.data[greenIndex] == originalColor.green) && (this.pixelArray.data[blueIndex] == originalColor.blue)) {
+          //if ((this.pixelArray.data[redIndex] == originalColor.red) && (this.pixelArray.data[greenIndex] == originalColor.green) && (this.pixelArray.data[blueIndex] == originalColor.blue)) {
+          if (this.pixelInRange({red: this.pixelArray.data[redIndex], green: this.pixelArray.data[greenIndex], blue: this.pixelArray.data[blueIndex]}, originalColor)) {
             var pixelToAdd = new DrawCoordinate();
             pixelToAdd.setCoordinate(currentPixels[currIdx].getX() + nextMapping[nextIdx][0], currentPixels[currIdx].getY() + nextMapping[nextIdx][1]);
             nextPixels.push(pixelToAdd);
+          } else {
+            if (this.pixelArray.data[redIndex] != 255) {
+              //console.log("hey red", this.pixelArray.data[redIndex]);
+              //console.log("hey green", this.pixelArray.data[greenIndex]);
+              //console.log("hey blue", this.pixelArray.data[blueIndex]);
+            }
           }
         }
       }
@@ -88,10 +83,11 @@ export class CanvasComponent implements OnInit {
 
   }
 
-  fillAreaWithColor(startPixel: DrawCoordinate, newColor: RGB, originaColor: RGB): void {
+  fillAreaWithColor(startPixel: DrawCoordinate, newColor: RGB, originalColor: RGB): void {
     this.pixelArray = this.ctx.getImageData(0, 0, 700, 700);
+    console.log(originalColor);
     console.log(this.pixelArray);
-    this.colorPixelSet(startPixel, newColor, originaColor);
+    this.colorPixelSet(startPixel, newColor, originalColor);
     this.ctx.putImageData(this.pixelArray, 0, 0);
 
     // Color Check
@@ -103,6 +99,7 @@ export class CanvasComponent implements OnInit {
   }
 
   setBrush(type: number): void {
+    this.drawingBrush.setBrushType(type);
     this.brushType = type;
   }
 
@@ -120,7 +117,19 @@ export class CanvasComponent implements OnInit {
 
   mouseDown($event): void {
     this.allowDraw = true;
-    if (this.brushType == 0) this.lastCoordinate.setCoordinate($event.clientX, $event.clientY);
+    /*
+    this.drawingBrush.draw();
+
+    this.allowDraw = true;
+    if (this.brushType == 0) {
+      this.currentCoordinate.setCoordinate($event.clientX, $event.clientY);
+
+      this.ctx.globalAlpha = 1.0;
+      this.ctx.strokeStyle = "#ffffff";
+      this.ctx.lineWidth = 2;
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.currentCoordinate.getX() - this.offsetRect.left, this.currentCoordinate.getY() - this.offsetRect.top);
+    } 
     if (this.brushType == 1) {
       var pixel = this.ctx.getImageData($event.clientX - this.offsetRect.left, $event.clientY - this.offsetRect.top, 1, 1);
       var data = pixel.data;
@@ -128,40 +137,33 @@ export class CanvasComponent implements OnInit {
       startPixel.setCoordinate($event.clientX, $event.clientY);
       this.fillAreaWithColor(startPixel, {red: 255, green: 0, blue: 0}, {red: data[0], green: data[1], blue: data[2]});
     }
+    */
   }
 
   mouseMove($event): void {
-
+    /*
     if (this.brushType == 1) return;
-
-    console.log("mouseMove", $event);
 
     if (!this.allowDraw) return;
 
-    this.currentCoordinate.setCoordinate($event.clientX, $event.clientY);
-    
-    this.ctx.globalAlpha = 1.0;
-    this.ctx.strokeStyle = "#ccffcc";
-    this.ctx.lineWidth = 1;
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.lastCoordinate.getX() - this.offsetRect.left, this.lastCoordinate.getY() - this.offsetRect.top);
+    this.currentCoordinate.setCoordinate($event.clientX, $event.clientY);   
     this.ctx.lineTo(this.currentCoordinate.getX() - this.offsetRect.left, this.currentCoordinate.getY() - this.offsetRect.top);
     this.ctx.stroke();
-    this.lastCoordinate.setCoordinate(this.currentCoordinate.getX(), this.currentCoordinate.getY());;
+    */
   }
 
-  iniitializeCanvas(): void {
+  initializeCanvas(): void {
     this.ctx.globalAlpha = 1.0;
     //ctx.fillStyle = "#00004d";
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0,0,this.drawingCanvas.width, this.drawingCanvas.height);
 
     /* JJV DEBUG - trying things */
-    this.lastCoordinate.setCoordinate(0, 0);
+    //this.lastCoordinate.setCoordinate(0, 0);
   }
 
   clearCanvas(): void {
-    this.iniitializeCanvas();
+    this.initializeCanvas();
   }
 
   constructor() { }
@@ -172,7 +174,8 @@ export class CanvasComponent implements OnInit {
     this.drawingCanvas = document.getElementById("drawingCanvas");
     this.ctx = this.drawingCanvas.getContext("2d");
     this.offsetRect = this.drawingCanvas.getBoundingClientRect();
-    this.iniitializeCanvas();
+    this.initializeCanvas();
+    this.drawingBrush.setup();
   }
 
 }
