@@ -44,7 +44,7 @@ export class DrawingBrushManager {
   }
 
   endDraw(): void {
-   this.currentBrush.endDraw();
+    this.currentBrush.endDraw();
   }
 }
 
