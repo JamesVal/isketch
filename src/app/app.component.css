@@ -7,9 +7,11 @@
   vertical-align: top;
   display: inline-block;
   width: calc(99% - 1025px);
+  height: 696px;
 }
 
 #chat-box-holder {
+  padding-top: 20px;
   vertical-align: top;
 }
 
@@ -28,9 +30,13 @@
   */
 }
 
-.header-text {
+#header-text {
   font-family: arial;
   font-weight: bold;
   font-size: 24px;
   padding: 10px;
+}
+
+#content {
+  padding: 15px;
 }

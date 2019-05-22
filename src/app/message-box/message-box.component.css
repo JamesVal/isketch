@@ -1,3 +1,10 @@
+#message-container {
+  border-radius: 10px;
+  border: 2px solid #73AD21;
+  overflow: hidden;
+  height: 100%;
+}
+
 #message-box-wrapper {
   display: inline-block;
   width: 100px;
@@ -10,4 +17,8 @@
 
 .message:nth-child(odd) {
   background-color: lightgray;
+}
+
+.message:nth-child(even) {
+  background-color: white;
 }
