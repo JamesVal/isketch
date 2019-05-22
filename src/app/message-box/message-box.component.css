@@ -1,0 +1,13 @@
+#message-box-wrapper {
+  display: inline-block;
+  width: 100px;
+}
+
+.message {
+  font-family: arial;
+  padding: 5px;
+}
+
+.message:nth-child(odd) {
+  background-color: lightgray;
+}

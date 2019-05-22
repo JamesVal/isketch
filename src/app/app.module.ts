@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { CanvasComponent } from './canvas/canvas.component';
 
 import { ColorPickerModule } from 'ngx-color-picker';
+import { MessageBoxComponent } from './message-box/message-box.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CanvasComponent
+    CanvasComponent,
+    MessageBoxComponent
   ],
   imports: [
     BrowserModule,
