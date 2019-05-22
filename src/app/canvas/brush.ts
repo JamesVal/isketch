@@ -80,7 +80,7 @@ class PencilBrush extends Brush {
 
   startDraw($event): void {
     super.startDraw($event);
-    
+
     this.ctx.globalAlpha = 1.0;
     this.ctx.strokeStyle = "#ffffff";
     this.ctx.lineWidth = 2;
@@ -92,7 +92,7 @@ class PencilBrush extends Brush {
   draw($event): void {
     if (!this.allowDraw) return;
 
-    this.currentCoordinate.setCoordinate($event.clientX, $event.clientY);   
+    this.currentCoordinate.setCoordinate($event.clientX, $event.clientY);
     this.ctx.lineTo(this.currentCoordinate.getX() - this.offsetRect.left, this.currentCoordinate.getY() - this.offsetRect.top);
     this.ctx.stroke();
   }
@@ -102,8 +102,8 @@ class FillBrush extends Brush {
   pixelArray: any;
 
   getColorIndicesForCoord(x: number, y: number) {
-    const red = y * (700 * 4) + x * 4;
-    return [red, red + 1, red + 2];
+    var red = Math.floor(y) * (700 * 4) + Math.floor(x) * 4;
+    return [red, red + 1, red + 2, red + 3];
   }
 
   pixelInRange(pixelColor: RGB, originalColor: RGB) {
@@ -132,7 +132,7 @@ class FillBrush extends Brush {
       nextPixels = [];
 
       for (let currIdx = 0; currIdx < currentPixels.length; currIdx++) {
-        var [redIndex, greenIndex, blueIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left, currentPixels[currIdx].getY() - this.offsetRect.top);
+        var [redIndex, greenIndex, blueIndex, alphaIndex] = this.getColorIndicesForCoord(currentPixels[currIdx].getX() - this.offsetRect.left, currentPixels[currIdx].getY() - this.offsetRect.top);
         
         if ((this.pixelArray.data[redIndex] == newColor.red) && (this.pixelArray.data[greenIndex] == newColor.green) && (this.pixelArray.data[blueIndex] == newColor.blue)) continue;
 
@@ -174,7 +174,7 @@ class FillBrush extends Brush {
     this.fillAreaWithColor(startPixel, {red: 255, green: 0, blue: 0}, {red: data[0], green: data[1], blue: data[2]});
   }
 
-  draw(): void {
+  draw($event): void {
   }
 }
 

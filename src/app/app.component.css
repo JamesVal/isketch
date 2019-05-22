@@ -1,12 +1,12 @@
 #canvas-holder {
   display: inline-block;
-  width: 1025px;
+  width: 700px;
 }
 
 #guess-box-holder {
   vertical-align: top;
   display: inline-block;
-  width: calc(99% - 1025px);
+  width: calc(99% - 700px);
   height: 696px;
 }
 

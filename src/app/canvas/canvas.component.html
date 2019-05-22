@@ -1,5 +1,5 @@
 <div id="canvas-container">
-  <canvas id="drawingCanvas" (mousedown)="mouseDown($event)" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mouseleave)="mouseLeave($event)" height=700 width=1000></canvas>
+  <canvas id="drawingCanvas" (mousedown)="mouseDown($event)" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mouseleave)="mouseLeave($event)" height=700 width=700></canvas>
 </div>
 <div id="helper-controls-container">
   <div class="button-container"><div class="button" [class.isSelected]="drawingBrush.brushType == 0" (click)="setBrush(0)">Pencil</div></div>
