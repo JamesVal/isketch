@@ -1,13 +1,41 @@
+#message-wrapper {
+  height: 700px;
+}
+
 #message-container {
+  display:table;
   border-radius: 10px;
   border: 2px solid #73AD21;
   overflow: hidden;
-  height: 100%;
+  width: 100%;
+  height: 650px;
 }
 
-#message-box-wrapper {
-  display: inline-block;
-  width: 100px;
+
+#guess-wrapper {
+  display:table;
+  width: calc(100% + 4px); 
+}
+
+#guess-container {
+  display: table-cell;
+  width: 100%;
+  height: 46px;
+  vertical-align: bottom;
+}
+
+#guess-input:focus {
+  outline: none;
+}
+
+#guess-input {
+  width: 100%;
+  height: 75%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 2px solid #73AD21;
+  overflow: hidden;
+  padding: 5px;
 }
 
 .message {

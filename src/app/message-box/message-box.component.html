@@ -1,6 +1,14 @@
-<div id="message-container">
-  <div class="message" *ngFor="let curMessage of messageList">
-    {{curMessage.username}}: {{curMessage.message}}
+<div id="message-wrapper">
+  <div id="message-container">
+    <div class="message" *ngFor="let curMessage of messageList">
+      {{curMessage.username}}: {{curMessage.message}}
+    </div>
+  </div>
+  <div id="guess-wrapper">
+    <div id="guess-container">
+      <input id="guess-input" type="text">
+    </div>
   </div>
 </div>
+
 
