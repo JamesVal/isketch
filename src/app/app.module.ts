@@ -1,10 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { ColorPickerModule } from 'ngx-color-picker';
+
+import { GuessMessagesService } from './guess-messages.service';
+
 import { AppComponent } from './app.component';
 import { CanvasComponent } from './canvas/canvas.component';
-
-import { ColorPickerModule } from 'ngx-color-picker';
 import { MessageBoxComponent } from './message-box/message-box.component';
 
 @NgModule({
@@ -17,7 +19,7 @@ import { MessageBoxComponent } from './message-box/message-box.component';
     BrowserModule,
     ColorPickerModule
   ],
-  providers: [],
+  providers: [GuessMessagesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

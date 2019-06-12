@@ -1,14 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-class Message {
-  username: string;
-  message: string;
-
-  constructor(curUser: string, curMessage: string) {
-    this.username = curUser;
-    this.message = curMessage;
-  }
-}
+import { GuessMessagesService } from '../guess-messages.service';
+import { Message } from '../guess-messages.service';
 
 @Component({
   selector: 'app-message-box',
@@ -16,19 +10,34 @@ class Message {
   styleUrls: ['./message-box.component.css']
 })
 export class MessageBoxComponent implements OnInit {
-  messageList: Message[] = [];
+  @ViewChild("scrollMe") scrollMe: ElementRef;
 
-  constructor() { }
+  newMessageEvent: Subscription = new Subscription();
+  allowAutoScroll: boolean = true;
+ 
+  mouseDownCurrentMessages(event): void {
+    this.allowAutoScroll = false;
+  }
+
+  mouseUpCurrentMessages(event): void {
+    this.allowAutoScroll = true;
+  }
+
+  constructor(private guessMessagesService: GuessMessagesService) { }
 
   ngOnInit() {
-    // JJV DEBUG - TEST LIST
-    var message1 = new Message("James", "HELLO!");
-    var message2 = new Message("James", "WORLD!");
-    var message3 = new Message("James", "I'M TESTING!");
+    this.newMessageEvent = this.guessMessagesService.newMessageEvent.subscribe(() => {
+      console.log("new message");
+    });
+  }
 
-    this.messageList.push(message1);
-    this.messageList.push(message2);
-    this.messageList.push(message3);
+  /* This autoscroll must occur *after* the data has been updated AND the view updates */
+  ngAfterViewChecked() {
+    if (this.allowAutoScroll) this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
+  }
+
+  ngOnDestroy() {
+    this.newMessageEvent.unsubscribe();
   }
 
 }
