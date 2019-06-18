@@ -27,13 +27,16 @@ export class GuessMessagesService {
   /* JJV DEBUG */
   testMessageCounter: number = 0;
 
-  updateMessages(messagesToAdd: Message) {
-    this.messageList.push(messagesToAdd);
+  updateMessages(messageToAdd: Message) {
+    this.messageList.push(messageToAdd);
     this.newMessageEvent.emit();
   }
 
-  sendMessage(): void {
-    console.log("test");
+  sendMessage(messageToSend: Message): void {
+    console.log("sendMessage:", messageToSend);
+
+    /* JJV DEBUG - This should be pushing to the server - for now I am just adding the message to the message list without parsing */
+    this.updateMessages(messageToSend);
   }
 
   /* JJV DEBUG */

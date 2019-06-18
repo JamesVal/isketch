@@ -1,0 +1,16 @@
+#canvas-holder {
+  display: inline-block;
+  width: 700px;
+}
+
+#guess-box-holder {
+  vertical-align: top;
+  display: inline-block;
+  width: calc(99% - 700px);
+  height: 696px;
+}
+
+#chat-box-holder {
+  padding-top: 20px;
+  vertical-align: top;
+}

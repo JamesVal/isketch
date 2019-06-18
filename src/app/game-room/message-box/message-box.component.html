@@ -6,7 +6,7 @@
   </div>
   <div id="guess-wrapper">
     <div id="guess-container">
-      <input id="guess-input" type="text">
+      <input id="guess-input" type="text" (keydown)="keyDown($event)" [(ngModel)]="currentGuess">
     </div>
   </div>
 </div>

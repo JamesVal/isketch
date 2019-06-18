@@ -13,14 +13,27 @@ export class MessageBoxComponent implements OnInit {
   @ViewChild("scrollMe") scrollMe: ElementRef;
 
   newMessageEvent: Subscription = new Subscription();
+  // JJV DEBUG - PASSING TEST NAME FOR NOW
+  currentGuess: string = "";
+  currentMessage: Message;
   allowAutoScroll: boolean = true;
- 
+
   mouseDownCurrentMessages(event): void {
     this.allowAutoScroll = false;
   }
 
   mouseUpCurrentMessages(event): void {
     this.allowAutoScroll = true;
+  }
+
+  keyDown(event): void {
+    if (event.key == "Enter") {
+      // JJV DEBUG - NEED TO USE REAL USERNAME HERE INSTEAD OF JAMES TEST1
+      this.currentMessage = new Message("JAMES TEST1", this.currentGuess);
+      this.guessMessagesService.sendMessage(this.currentMessage);
+      this.currentGuess = "";
+      console.log("submit");
+    }
   }
 
   constructor(private guessMessagesService: GuessMessagesService) { }
