@@ -1,7 +1,7 @@
 <div id="message-wrapper">
   <div id="message-container" #scrollMe (mousedown)="mouseDownCurrentMessages($event)" (mouseup)="mouseUpCurrentMessages($event)">
     <div class="message" *ngFor="let curMessage of guessMessagesService.messageList">
-      {{curMessage.username}}: {{curMessage.message}}
+      <span class="username">{{curMessage.username}}:</span> {{curMessage.message}}
     </div>
   </div>
   <div id="guess-wrapper">

@@ -1,0 +1,6 @@
+<div id="login-outer-container">
+  <div id="login-inner-container">
+    Username: <input id="login" [(ngModel)]="currentUsername" (keyup)="onKeyup($event)">
+    <button (click)="loginClick()" [disabled]="currentUsername == ''">Login</button>
+  </div>
+</div>

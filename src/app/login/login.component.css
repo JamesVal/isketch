@@ -1,0 +1,13 @@
+#login-outer-container {
+  text-align: center;
+  display: table;
+  height: 75vh;
+  width: 100%;
+  font-family: arial;
+}
+
+#login-inner-container {
+  display: table-cell;
+  vertical-align: middle;
+}
+

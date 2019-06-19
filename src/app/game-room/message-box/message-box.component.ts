@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { UserManagementService } from '../../user-management.service';
 import { GuessMessagesService } from '../guess-messages.service';
 import { Message } from '../guess-messages.service';
 
@@ -29,14 +30,14 @@ export class MessageBoxComponent implements OnInit {
   keyDown(event): void {
     if (event.key == "Enter") {
       // JJV DEBUG - NEED TO USE REAL USERNAME HERE INSTEAD OF JAMES TEST1
-      this.currentMessage = new Message("JAMES TEST1", this.currentGuess);
+      this.currentMessage = new Message(this.userManagementService.getUsername(), this.currentGuess);
       this.guessMessagesService.sendMessage(this.currentMessage);
       this.currentGuess = "";
       console.log("submit");
     }
   }
 
-  constructor(private guessMessagesService: GuessMessagesService) { }
+  constructor(private userManagementService: UserManagementService, private guessMessagesService: GuessMessagesService) { }
 
   ngOnInit() {
     this.newMessageEvent = this.guessMessagesService.newMessageEvent.subscribe(() => {
