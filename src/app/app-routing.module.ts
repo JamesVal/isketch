@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule, Injectable } from '@angular/core';
+import { Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
+import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 
 // JJV DEBUG - will need to check the login - don't allow them to go to gameroom without actually logging in first
@@ -17,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'gameroom',
-    loadChildren: './game-room/game-room.module#GameRoomModule'
+    loadChildren: './game-room/game-room.module#GameRoomModule',
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -26,3 +28,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

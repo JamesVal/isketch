@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import {AppRoutingModule } from './app-routing.module';
 
+import { AuthGuard } from './auth/auth.guard';
 import { UserManagementService } from './user-management.service';
 
 import { AppComponent } from './app.component';
@@ -20,6 +21,7 @@ import { LoginComponent } from './login/login.component';
     AppRoutingModule
   ],
   providers: [
+    AuthGuard,
     UserManagementService
   ],
   bootstrap: [AppComponent]
