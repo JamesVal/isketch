@@ -11,7 +11,7 @@ import { Message } from '../guess-messages.service';
   styleUrls: ['./message-box.component.css']
 })
 export class MessageBoxComponent implements OnInit {
-  @ViewChild("scrollMe") scrollMe: ElementRef;
+  @ViewChild("scrollMe", { static: true }) scrollMe: ElementRef;
 
   newMessageEvent: Subscription = new Subscription();
   // JJV DEBUG - PASSING TEST NAME FOR NOW
