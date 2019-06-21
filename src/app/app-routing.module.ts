@@ -17,6 +17,11 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'loungeroom',
+    loadChildren: () => import('./lounge-room/lounge-room.module').then(m => m.LoungeRoomModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'gameroom',
     loadChildren: () => import('./game-room/game-room.module').then(m => m.GameRoomModule),
     canActivate: [AuthGuard]

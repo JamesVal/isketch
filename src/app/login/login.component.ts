@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     if (this.currentUsername) {
       console.log("login");
       this.userManagementService.setUsername(this.currentUsername);
-      this.router.navigate(['/gameroom']);
+      this.router.navigate(['/loungeroom']);
     }
   }
 
