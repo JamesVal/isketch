@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'gameroom',
-    loadChildren: './game-room/game-room.module#GameRoomModule',
+    loadChildren: () => import('./game-room/game-room.module').then(m => m.GameRoomModule),
     canActivate: [AuthGuard]
   }
 ];
